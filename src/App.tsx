@@ -1,35 +1,41 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { Outlet, RouterProvider, createBrowserRouter } from "react-router-dom";
 
-function App() {
-  const [count, setCount] = useState(0)
+import { Footer } from "./components/Footer";
+import { Navbar } from "./components/Navbar";
 
-  return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+import { Home } from "./pages/Home/Home";
+import { Menu } from "./components/Menu";
+
+export function App() {
+  const Layout = () => {
+    return (
+      <div className="main bg-main-background text-white">
+        <Navbar />
+        <div className="container flex">
+          <div className="menu-container w-[250px] py-[5px] px-[20px] border-r-[2px] border-solid border-soft-background">
+            <Menu />
+          </div>
+          <div className="content-container py-[5px] px-[20px]">
+            <Outlet />
+          </div>
+        </div>
+        <Footer />
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    );
+  }
+
+  const router = createBrowserRouter([
+    {
+      path: "/",
+      element: <Layout />,
+      children: [
+        {
+          path: "/",
+          element: <Home />
+        }
+      ],
+    }
+  ]);
+
+  return <RouterProvider router={router} />;
 }
-
-export default App
